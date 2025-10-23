@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -5,6 +6,7 @@ public class CardElement : MonoBehaviour
 {
     [Header("Card Values")]
     int _cardValue = 0;
+    public int cardValue => _cardValue;
 
     [Header("Card Settings")]
     int _layer = 0;
@@ -39,5 +41,31 @@ public class CardElement : MonoBehaviour
     protected virtual void Start()
     {
         
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        CardElement cardElement = collision.GetComponent<CardElement>();
+        if (cardElement != null)
+        {
+            OnCardCollision(cardElement);
+        }
+    }
+
+    protected virtual void OnCardCollision(CardElement otherCard)
+    {
+
+    }
+
+    protected virtual bool CheckCardPair(CardElement otherCard)
+    {
+        if(otherCard == null) return false;
+
+        int otherCardValue = otherCard.cardValue;
+
+        if(otherCardValue == _cardValue) return true;
+        if(otherCardValue + _cardValue == 10) return true;
+
+        return false;
     }
 }

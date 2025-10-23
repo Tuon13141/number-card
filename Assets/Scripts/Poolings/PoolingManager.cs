@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PoolingManager : Singleton<PoolingManager>
+public class PoolingManager : SingletonDontDestroyOnLoad<PoolingManager>
 {
     [SerializeField] private PoolingConfig config;
 
