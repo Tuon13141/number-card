@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class CardElement : MonoBehaviour
 {
@@ -8,9 +9,12 @@ public class CardElement : MonoBehaviour
     int _cardValue = 0;
     public int cardValue => _cardValue;
 
+    int _cardIndex = 0;
+    public int cardIndex => _cardIndex;
+
     [Header("Card Settings")]
     int _layer = 0;
-    Vector2 _position = Vector2.zero;
+    Vector2 _startPosition = Vector2.zero;
 
     [Header("References")]
     [SerializeField] DragableObject _dragableObject;
@@ -18,13 +22,17 @@ public class CardElement : MonoBehaviour
     [SerializeField] TextMeshPro _valueText;
     [SerializeField] BoxCollider2D _collider2D;
 
-    public virtual void SetUp(int cardValue, int layer, Vector2 position)
+    public virtual void SetUp(int cardValue, int layer, int cardIndex, Vector2 position)
     {
         _cardValue = cardValue;
         _layer = layer;
-        _position = position;
+        _cardIndex = cardIndex;
+
+        transform.position = position;
+        _startPosition = position;
 
         SetUpSprite();
+        SetUpText();
     }
 
     protected virtual void SetUpSprite()

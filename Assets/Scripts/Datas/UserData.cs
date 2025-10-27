@@ -22,7 +22,7 @@ namespace Data
                 firstLoad = false;
             }
 
-            SoundManager.Instance.Init(sound, music);
+            //SoundManager.Instance.Init(sound, music);
         }
     }
 

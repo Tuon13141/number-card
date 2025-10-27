@@ -21,6 +21,8 @@ public class DragableObject : MonoBehaviour, IDraggable
     {
         if (!dragableSetting.canInteract) return;
 
+        Debug.Log("Is Dragging");
+
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(eventData.position);
         worldPos.z = transform.position.z;
         transform.position = worldPos + (Vector3)dragableSetting.offset;

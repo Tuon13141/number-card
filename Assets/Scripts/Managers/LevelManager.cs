@@ -2,15 +2,10 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField] LevelConfig m_LevelConfig;
 
-    // Update is called once per frame
-    void Update()
+    public LevelData GetLevelData(int level)
     {
-        
+        return LevelDataConvertor.LoadLevel(m_LevelConfig.GetLevel(level));
     }
 }
