@@ -83,6 +83,8 @@ public class GameManager : Singleton<GameManager>
     {
         GameUI.Instance.Get<UIInGame>().Hide();
         GameUI.Instance.Get<UIWin>().Show();
+
+        m_LevelManager.NextLevel();
     }
 
     public void OnLose()

@@ -141,6 +141,7 @@ public class StackElement : MonoBehaviour
     {
         _upperStacks.AddRange(upperElements);
 
+        if(upperElements.Count <= 0) return;
         LockCard();
     }
 

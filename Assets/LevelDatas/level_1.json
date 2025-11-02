@@ -45,7 +45,7 @@
         },
         {
           "cardDatas": [
-            { "value": 5, "type": 1 }
+            { "value": 5, "type": 0 }
           ]
         }
       ]
