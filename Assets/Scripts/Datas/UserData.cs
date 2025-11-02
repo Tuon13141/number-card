@@ -13,6 +13,8 @@ namespace Data
         public bool firstLoad = false;
         public bool sound = true;
         public bool music = true;
+
+        public int level = 0;
         public void Init()
         {
             if (firstLoad)

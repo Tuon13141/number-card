@@ -1,0 +1,144 @@
+{
+  "playTime": 180,
+  "layerDatas": [
+    {
+      "width": 5,
+      "height": 3,
+      "stackDatas": [
+        {
+          "cardDatas": [
+            { "value": 3, "type": 0 }
+          ]
+        },
+        {
+          "cardDatas": [
+            { "value": 6, "type": 0 }
+          ]
+        },
+        {
+          "cardDatas": []
+        },
+        {
+          "cardDatas": [
+            { "value": 5, "type": 0 }
+          ]
+        },
+        {
+          "cardDatas": [
+            { "value": 2, "type": 0 }
+          ]
+        },
+        {
+          "cardDatas": [
+            { "value": 6, "type": 0 }
+          ]
+        },
+        {
+           "cardDatas": [
+            { "value": 4, "type": 0 }
+          ]
+        },
+        {
+           "cardDatas": [
+            { "value": 2, "type": 0 }
+           ]
+        },
+        {
+           "cardDatas": [
+            { "value": 8, "type": 0 }
+          ]
+        },
+        {
+          "cardDatas": [
+            { "value": 4, "type": 0 }
+          ]
+        },
+        {
+          "cardDatas": [
+            { "value": 3, "type": 0 }
+          ]
+        },
+        {
+          "cardDatas": [
+            { "value": 2, "type": 0 }
+          ]
+        },
+        {
+          "cardDatas": []
+        },
+        {
+          "cardDatas": [
+            { "value": 5, "type": 0 }
+          ]
+        },
+        {
+          "cardDatas": [
+            { "value": 1, "type": 0 }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 4,
+      "height": 3,
+      "stackDatas": [
+        {
+          "cardDatas": [
+            { "value": 1, "type": 0 }
+          ]
+        },
+        {
+           "cardDatas": []
+        },
+        {
+          "cardDatas": []
+        },
+        {
+           "cardDatas": [
+            { "value": 7, "type": 0 },
+            { "value": 8, "type": 0 },
+            { "value": 7, "type": 0 }
+          ]
+        },
+        {
+           "cardDatas": [
+            { "value": 6, "type": 2 }
+          ]
+        },
+        {
+           "cardDatas": [
+            { "value": 5, "type": 0 }
+          ]
+        },
+        {
+           "cardDatas": [
+            { "value": 9, "type": 0 }
+          ]
+        },
+        {
+           "cardDatas": [
+            { "value": 4, "type": 0 }
+          ]
+        },
+        {
+           "cardDatas": [
+            { "value": 2, "type": 0 },
+            { "value": 5, "type": 0 },
+            { "value": 1, "type": 0 }
+          ]
+        },
+        {
+           "cardDatas": []
+        },
+        {
+           "cardDatas": []
+        },
+        {
+           "cardDatas": [
+            { "value": 8, "type": 0 }
+          ]
+        }
+      ]
+    }
+  ]
+}

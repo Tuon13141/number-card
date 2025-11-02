@@ -10,4 +10,6 @@ public class LevelConfig : ScriptableObject
     {
         return levels[level];
     }
+
+    public int GetTotalLevel() { return levels.Count; }
 }

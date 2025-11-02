@@ -18,4 +18,9 @@ public class GlobalConfig : SingletonDontDestroyOnLoad<GlobalConfig>
         Application.targetFrameRate = 60;
         QualitySettings.vSyncCount = 0;
     }
+
+    private void Start()
+    {
+        GameUI.Instance.Get<UIHome>().Show();
+    }
 }

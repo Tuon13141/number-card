@@ -44,6 +44,9 @@ TagManager:
   - name: Default + 1
     uniqueID: 1449950941
     locked: 0
+  - name: Picking
+    uniqueID: 1399766585
+    locked: 0
   m_RenderingLayers:
   - Default
   - Light Layer 1

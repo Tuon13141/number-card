@@ -9,11 +9,11 @@ public class LayerElement : MonoBehaviour
     [Header("Data")]
     private List<StackElement> _stackElements = new List<StackElement>();
     private LayerData _layerData;
+    public LayerData layerData => _layerData;
     private int _layerIndex;
 
     [Header("Settings")]
     [SerializeField] private Vector2 m_StackElementOffset = new Vector2(1, 1.5f);
-    [SerializeField] private SortingGroup m_SortingGroup;
 
     private void Start()
     {
@@ -24,8 +24,6 @@ public class LayerElement : MonoBehaviour
     {
         _layerData = layerData;
         _layerIndex = layerIndex;
-
-        m_SortingGroup.sortingOrder = _layerIndex;
 
         int width = layerData.width;
         int height = layerData.height;
@@ -59,8 +57,67 @@ public class LayerElement : MonoBehaviour
 
                 _stackElements.Add(stackElement);
 
-                stackElement.SetUp(layerData.stackDatas[index], layerIndex);
+                stackElement.SetUp(layerData.stackDatas[index], layerIndex, new Vector2Int(x, y));
             }
         }
+    }
+
+    public void SetUpperStack(LayerElement upperLayer)
+    {
+        foreach(StackElement stackElement in _stackElements)
+        {
+            int width = layerData.width;
+            int height = layerData.height;  
+
+            int upperWidth = upperLayer.layerData.width;
+            int upperHeight = upperLayer.layerData.height;
+
+            Vector2Int vector2Int = stackElement.gridPosition;
+
+            List<Vector2Int> upperPositions = MatrixHelper.GetOverlappingCells(width, height, upperWidth, upperHeight, vector2Int);
+
+            List<StackElement> upperStacks = new List<StackElement>();
+
+            foreach(Vector2Int vector in upperPositions)
+            {
+                StackElement se = upperLayer.GetStackElement(vector);
+
+                upperStacks.Add(se);
+            }
+
+            stackElement.SetUpperStack(upperStacks); 
+
+            foreach(StackElement se in upperStacks)
+            {
+                se.AddLowerStack(stackElement);
+            }
+        }
+    }
+
+    public StackElement GetStackElement(Vector2Int vector2Int)
+    {
+        foreach (StackElement stackElement in _stackElements)
+        {
+            if(stackElement.gridPosition == vector2Int) return stackElement;
+        }
+
+        return null;
+    }
+
+    public void OnReset()
+    {
+        this.transform.parent = null;
+
+        _layerData = null;
+        _layerIndex = -1;
+
+        foreach(StackElement stackElement in _stackElements)
+        {
+            stackElement.OnReset();
+        }
+
+        _stackElements.Clear();
+
+        PoolingManager.Instance.Release(this);
     }
 }

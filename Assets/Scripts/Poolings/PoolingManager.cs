@@ -62,7 +62,7 @@ public class PoolingManager : SingletonDontDestroyOnLoad<PoolingManager>
             }
 
             var newObj = Instantiate(prefab.gameObject);
-            newObj.name = $"{type.Name}_Pooled";
+            newObj.name = $"{type.Name}";
             return newObj.GetComponent<T>();
         }
 

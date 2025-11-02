@@ -1,7 +1,9 @@
+using DG.Tweening;
 using System;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
+
 
 public class CardElement : MonoBehaviour
 {
@@ -15,18 +17,34 @@ public class CardElement : MonoBehaviour
     [Header("Card Settings")]
     int _layer = 0;
     Vector2 _startPosition = Vector2.zero;
+    public const float timeReturnToStartPosition = 0.5f;
+
+    bool _canInteractable = true;
+    bool _isPicking = false;
 
     [Header("References")]
-    [SerializeField] DragableObject _dragableObject;
-    [SerializeField] SpriteRenderer _cardSprite;
-    [SerializeField] TextMeshPro _valueText;
-    [SerializeField] BoxCollider2D _collider2D;
+    [SerializeField] DragableObject m_DragableObject;
+    [SerializeField] SpriteRenderer m_CardSprite;
+    [SerializeField] TextMeshPro m_ValueText;
+    [SerializeField] BoxCollider2D m_Collider2D;
 
-    public virtual void SetUp(int cardValue, int layer, int cardIndex, Vector2 position)
+    StackElement _stackElement;
+    private CardElement _collisionCard;
+
+    protected virtual void Start()
+    {
+        m_DragableObject.OnPointerDownAction += OnStartDrag;
+        m_DragableObject.OnDragAction += OnDrag;
+        m_DragableObject.OnPointerUpAction += OnEndDrag;
+    }
+
+
+    public virtual void SetUp(int cardValue, int layer, int cardIndex, Vector2 position, StackElement stackElement)
     {
         _cardValue = cardValue;
         _layer = layer;
         _cardIndex = cardIndex;
+        _stackElement = stackElement;
 
         transform.position = position;
         _startPosition = position;
@@ -37,37 +55,61 @@ public class CardElement : MonoBehaviour
 
     protected virtual void SetUpSprite()
     {
-
+        m_CardSprite.sortingOrder = _layer;
+        m_ValueText.sortingOrder = _layer;
     }
 
     protected void SetUpText()
     {
-        _valueText.text = _cardValue.ToString();
+        m_ValueText.text = _cardValue.ToString();
     }
 
+    #region Merge
 
-    protected virtual void Start()
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        
-    }
+        if(_collisionCard != null) return;
+        if (!_isPicking) return; 
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
         CardElement cardElement = collision.GetComponent<CardElement>();
         if (cardElement != null)
         {
-            OnCardCollision(cardElement);
+            if (CheckCardPair(cardElement))
+            {
+                _collisionCard = cardElement;
+            }
         }
     }
 
-    protected virtual void OnCardCollision(CardElement otherCard)
+    protected virtual void OnTriggerExit2D(Collider2D collision)
     {
+        if (!_isPicking) return;
 
+        CardElement cardElement = collision.GetComponent<CardElement>();
+        if(cardElement == null || cardElement != _collisionCard)
+        {
+            return;
+        }
+
+        OnResetSprite();
+    }
+
+    protected virtual void MergeCard()
+    {
+        _collisionCard.OnMerge();
+        OnMerge();
+    }
+
+    public void OnMerge()
+    {
+        _stackElement.OnCardMerge(this);
     }
 
     protected virtual bool CheckCardPair(CardElement otherCard)
     {
         if(otherCard == null) return false;
+
+        if(!otherCard.CheckConditionToMerge()) return false;
 
         int otherCardValue = otherCard.cardValue;
 
@@ -75,5 +117,136 @@ public class CardElement : MonoBehaviour
         if(otherCardValue + _cardValue == 10) return true;
 
         return false;
+    }
+
+    #endregion
+
+    #region CheckCondition
+
+    public bool CheckConditionToMerge()
+    {
+        return _stackElement.CheckUpperStack();
+    }
+
+    public bool CheckCanInteractable()
+    {
+        if (!_canInteractable) return false;
+        return true;
+    }
+    #endregion
+
+    #region Interaction
+
+    Tween _moveTween;
+    void ReturnToStartPosition()
+    {
+        _moveTween?.Kill();
+        _moveTween = transform.DOMove(_startPosition, timeReturnToStartPosition);
+    }
+
+    void OnStartDrag()
+    {
+        if (!CheckCanInteractable()) return;
+
+        _isPicking = true;
+        SetInteractionSprite();
+        m_CardSprite.sortingLayerName = "Picking";
+    }
+
+    void OnEndDrag()
+    {
+        if (!CheckCanInteractable()) return;
+
+        SetSpriteColor(Color.white);
+
+        if (_collisionCard != null)
+        {
+            MergeCard();
+        }
+        else
+        {
+            ReturnToStartPosition();
+        }
+
+        m_CardSprite.sortingLayerName = "Default";
+
+        int layerId = SortingLayer.NameToID("Default");
+        m_ValueText.sortingLayerID = layerId;
+
+        _isPicking = false;
+    }
+
+    void OnDrag()
+    {
+        if (!CheckCanInteractable()) return;
+
+        SetInteractionSprite();
+    }
+
+    void SetInteractionSprite()
+    {
+        if (_collisionCard != null)
+        {
+            SetSpriteColor(Color.green, 0.75f);
+            _collisionCard.SetSpriteColor(Color.green);
+        }
+        else
+        {
+            SetSpriteColor(Color.white, 0.75f);
+        }
+
+        int layerId = SortingLayer.NameToID("Picking");
+        m_ValueText.sortingLayerID = layerId;
+    }
+
+    #endregion
+
+    #region Setter
+    public void SetSpriteColor(Color color, float aphal = 1)
+    {
+        Color c = color;
+        c.a = aphal;
+        m_CardSprite.color = c;
+    }
+
+    public void Lock()
+    {
+        _canInteractable = false;
+        SetSpriteColor(Color.cyan, 1f);
+        m_DragableObject.SetInteractable(false);
+    }
+
+    public void Unlock()
+    {
+        _canInteractable = true;
+        SetSpriteColor(Color.white, 1f);
+        m_DragableObject.SetInteractable(true);
+    }
+    #endregion
+
+    public void OnResetSprite()
+    {
+        _collisionCard?.SetSpriteColor(Color.white, 1);
+        SetSpriteColor(Color.white, 1);
+        _collisionCard = null;
+    }
+
+    public virtual void OnReset()
+    {
+        _cardValue = 0;
+        _cardIndex = 0;
+        _startPosition = Vector2.zero;
+        _stackElement = null;
+        _canInteractable = true;
+        _isPicking = false;
+        _layer = 0;
+
+        OnResetSprite();
+
+        this.transform.parent = null;
+
+        SetUpText();
+
+        PoolingManager.Instance.Release(this);
     }
 }

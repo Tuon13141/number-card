@@ -1,0 +1,105 @@
+{
+  "playTime": 180,
+  "layerDatas": [
+    {
+      "width": 3,
+      "height": 4,
+      "stackDatas": [
+        {
+          "cardDatas": [
+            { "value": 5, "type": 0 }
+          ]
+        },
+        {
+          "cardDatas": [
+            { "value": 2, "type": 0 }
+          ]
+        },
+        {
+          "cardDatas": [
+            { "value": 2, "type": 0 }
+          ]
+        },
+        {
+          "cardDatas": [
+            { "value": 6, "type": 0 }
+          ]
+        },
+        {
+          "cardDatas": []
+        },
+        {
+          "cardDatas": [
+            { "value": 2, "type": 0 }
+          ]
+        },
+        {
+           "cardDatas": [
+            { "value": 4, "type": 0 }
+          ]
+        },
+        {
+           "cardDatas": []
+        },
+        {
+           "cardDatas": [
+            { "value": 5, "type": 0 }
+          ]
+        },
+        {
+          "cardDatas": [
+            { "value": 8, "type": 0 }
+          ]
+        },
+        {
+          "cardDatas": [
+            { "value": 2, "type": 0 }
+          ]
+        },
+        {
+          "cardDatas": [
+            { "value": 5, "type": 0 }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 2,
+      "height": 2,
+      "stackDatas": [
+        {
+          "cardDatas": [
+            { "value": 1, "type": 0 }
+          ]
+        },
+        {
+           "cardDatas": [
+            { "value": 1, "type": 0 }
+          ]
+        },
+        {
+          "cardDatas": [
+            { "value": 6, "type": 0 }
+          ]
+        },
+        {
+           "cardDatas": [
+            { "value": 4, "type": 0 }
+          ]
+        },
+        {
+           "cardDatas": [
+            { "value": 7, "type": 0 },
+            { "value": 9, "type": 0 },
+            { "value": 8, "type": 0 }
+          ]
+        },
+        {
+           "cardDatas": [
+            { "value": 2, "type": 0 }
+          ]
+        }
+      ]
+    }
+  ]
+}

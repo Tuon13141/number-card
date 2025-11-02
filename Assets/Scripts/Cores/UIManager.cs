@@ -8,10 +8,6 @@ public class UIManager : SingletonDontDestroyOnLoad<UIManager>
     [SerializeField] private UIStates _state = UIStates.None;
     
     GameUI gameUI = null;
-
-    bool firstGame = true;
-   
-
     private void Start()
     {
         gameUI = GameUI.Instance;
