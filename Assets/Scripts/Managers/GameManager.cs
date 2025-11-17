@@ -54,7 +54,7 @@ public class GameManager : Singleton<GameManager>
 
         for (int i = 0; i < _layerElements.Count - 1; i++)
         {
-            _layerElements[i].SetUpperStack(_layerElements[i + 1]);
+            _layerElements[i].SetUpperCard(_layerElements[i + 1]);
         }
 
 

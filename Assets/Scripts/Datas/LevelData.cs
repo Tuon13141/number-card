@@ -17,12 +17,6 @@ public class LayerData
     public int width;
     public int height;
 
-    public List<StackData> stackDatas = new List<StackData>();
-}
-
-[Serializable]
-public class StackData
-{
     public List<CardData> cardDatas = new List<CardData>();
 }
 
@@ -31,4 +25,34 @@ public class CardData
 {
     public int value;
     public int type;
+}
+
+[Serializable]
+public class SpecialCardData : CardData
+{
+    public int totalPairCountDownToNormal;
+}
+
+[Serializable]
+public class BonusCardData : SpecialCardData
+{
+    public int multiplier;
+}
+
+[Serializable]
+public class FreezeCardData : SpecialCardData
+{
+    public float timeFreeze;
+}
+
+[Serializable]
+public class TimeCardData : SpecialCardData
+{
+    public float timeAdd;
+}
+
+[Serializable]
+public class FireworkCardData : SpecialCardData
+{
+    public int totalPairGetDestroy;
 }

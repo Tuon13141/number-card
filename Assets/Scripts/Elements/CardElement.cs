@@ -1,19 +1,31 @@
 using DG.Tweening;
+using NaughtyAttributes;
 using System;
+using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 
 public class CardElement : MonoBehaviour
 {
-    [Header("Card Values")]
+    [Header("Card Data")]
     int _cardValue = 0;
     public int cardValue => _cardValue;
+
 
     int _cardIndex = 0;
     public int cardIndex => _cardIndex;
 
+
+    private Vector2Int _gridPosition;
+    public Vector2Int gridPosition => _gridPosition;
+
+
+    private List<CardElement> _upperCards = new List<CardElement>();
+    private List<CardElement> _lowerCards = new List<CardElement>();
+
+
+    [HorizontalLine(2, EColor.Blue)]
     [Header("Card Settings")]
     int _layer = 0;
     Vector2 _startPosition = Vector2.zero;
@@ -22,13 +34,15 @@ public class CardElement : MonoBehaviour
     bool _canInteractable = true;
     bool _isPicking = false;
 
+
+    [HorizontalLine(2, EColor.Blue)]
     [Header("References")]
     [SerializeField] DragableObject m_DragableObject;
     [SerializeField] SpriteRenderer m_CardSprite;
     [SerializeField] TextMeshPro m_ValueText;
     [SerializeField] BoxCollider2D m_Collider2D;
 
-    StackElement _stackElement;
+    private LayerElement _layerElement;
     private CardElement _collisionCard;
 
     protected virtual void Start()
@@ -39,14 +53,16 @@ public class CardElement : MonoBehaviour
     }
 
 
-    public virtual void SetUp(int cardValue, int layer, int cardIndex, Vector2 position, StackElement stackElement)
+    public virtual void SetUp(CardData cardData, Vector2 position, LayerElement layerElement)
     {
         _cardValue = cardValue;
-        _layer = layer;
+        _layer = layerElement.layerIndex;
         _cardIndex = cardIndex;
-        _stackElement = stackElement;
+        _layerElement = layerElement;
 
-        transform.position = position;
+        transform.parent = layerElement.transform;
+        transform.localPosition = position;
+
         _startPosition = position;
 
         SetUpSprite();
@@ -102,7 +118,7 @@ public class CardElement : MonoBehaviour
 
     public void OnMerge()
     {
-        _stackElement.OnCardMerge(this);
+        _layerElement.OnCardMerge(this);
     }
 
     protected virtual bool CheckCardPair(CardElement otherCard)
@@ -125,7 +141,30 @@ public class CardElement : MonoBehaviour
 
     public bool CheckConditionToMerge()
     {
-        return _stackElement.CheckUpperStack();
+        return CheckUpperStack();
+    }
+
+    public bool CheckUpperStack()
+    {
+        bool b = true;
+
+        if (_upperCards.Count > 0)
+        {
+            b = false;
+        }
+
+        return b;
+    }
+
+    public void CheckLowerStack()
+    {
+        foreach (CardElement cardElement in _lowerCards)
+        {
+            if (cardElement.CheckUpperStack())
+            {
+                cardElement.Unlock();
+            }
+        }
     }
 
     public bool CheckCanInteractable()
@@ -199,6 +238,7 @@ public class CardElement : MonoBehaviour
         m_ValueText.sortingLayerID = layerId;
     }
 
+
     #endregion
 
     #region Setter
@@ -222,6 +262,19 @@ public class CardElement : MonoBehaviour
         SetSpriteColor(Color.white, 1f);
         m_DragableObject.SetInteractable(true);
     }
+
+    public void SetUpperCard(List<CardElement> upperElements)
+    {
+        _upperCards.AddRange(upperElements);
+
+        if (upperElements.Count <= 0) return;
+        Lock();
+    }
+
+    public void AddLowerStack(CardElement lowerElement)
+    {
+        _lowerCards.Add(lowerElement);
+    }
     #endregion
 
     public void OnResetSprite()
@@ -235,8 +288,12 @@ public class CardElement : MonoBehaviour
     {
         _cardValue = 0;
         _cardIndex = 0;
+        _gridPosition = Vector2Int.zero;
+        _upperCards = new List<CardElement>();
+        _lowerCards = new List<CardElement>();
+
         _startPosition = Vector2.zero;
-        _stackElement = null;
+
         _canInteractable = true;
         _isPicking = false;
         _layer = 0;
